@@ -1,17 +1,15 @@
-//const BASE_URL = "http://localhost:3000"
-// const TRAINERS_URL = `${BASE_URL}/trainers`
-// const POKEMONS_URL = `${BASE_URL}/pokemons`
+const BASE_URL = "http://localhost:3000"
+const TRAINERS_URL = `${BASE_URL}/trainers`
+const POKEMONS_URL = `${BASE_URL}/pokemons`
 
 document.addEventListener('DOMContentLoaded', function(){
-  fetch('http://localhost:3000/trainers')
+  fetch(TRAINERS_URL)
   .then(res => res.json())
   .then(function(trainers){
     const main = document.querySelector('#main')
     trainers.forEach(function(trainer){
-      if (document.querySelector(`#trainer-${trainer.id}`) == null) {
-        const trainerCard = createTrainerCard(trainer)
-        main.append(trainerCard)
-      } //why is the dom loading twice??
+      const trainerCard = createTrainerCard(trainer)
+      main.append(trainerCard)
     })
   })
 
@@ -57,7 +55,7 @@ function addAPokemon(pokemon){
   listItem.append(releasePokemon)
 
   listItem.addEventListener('click', function(){
-    fetch(`http://localhost:3000/pokemons/${pokemon.id}`,{
+    fetch(POKEMONS_URL + "/" + pokemon.id,{
       method: "DELETE"
     })
     listItem.remove()
@@ -70,7 +68,7 @@ function checkNumberOfPokemon(trainer){
   const pokemonList = trainersCard.children[2]
 
   if (pokemonList.children.length < 6) {
-    fetch('http://localhost:3000/pokemons', {
+    fetch(POKEMONS_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
