@@ -59,9 +59,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 main.append(div)
 
                 //fetch pokemon data
-                if (pokemonList.length < 6) {
-                    //add event to addButton
-                    addButton.addEventListener('click', function (e) {
+
+                //add event to addButton
+                addButton.addEventListener('click', function (e) {
+                    //check if the ul has 6 nodes 
+                    if (ul.children.length < 6) {
+
                         e.preventDefault();
                         //each time when we click the button, we get a new pokemon
                         //below creates a new pokemon each time
@@ -78,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 return response.json()
                             })
                             .then(function (pokemonData) {
+
+
                                 //create HTML element for the new pokemon
                                 let li = document.createElement('li')
                                 li.innerText = `${pokemonData.nickname} (${pokemonData.species})`
@@ -98,9 +103,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                             })
+                    }
+                })
 
-                    })
-                }
             }
         })
 
