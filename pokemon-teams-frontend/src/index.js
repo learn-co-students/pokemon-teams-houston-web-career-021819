@@ -3,14 +3,14 @@ const TRAINERS_URL = `${BASE_URL}/trainers`
 const POKEMONS_URL = `${BASE_URL}/pokemons`
 const main = document.querySelector('main')
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     fetch(TRAINERS_URL)
-        .then(function(response){
+        .then(function (response) {
             return response.json()
         })
-        .then(function(trainerList){
+        .then(function (trainerList) {
 
-            for(let i = 0; i< trainerList.length; i++){
+            for (let i = 0; i < trainerList.length; i++) {
                 //get trainer name
                 const trainerName = trainerList[i].name
 
@@ -27,14 +27,14 @@ document.addEventListener('DOMContentLoaded', function(){
                 addButton.setAttribute("data-trainer-id", `${trainerList[i].id}`)
                 addButton.innerText = "Add Pokemon"
                 div.appendChild(addButton)
-                //add event to add Button
+
 
                 //create ul for each trainer
                 let ul = document.createElement('ul')
                 //get each trainer's pokemons
                 const pokemonList = trainerList[i].pokemons
                 //iterate pokemon list
-                for(let j = 0; j < pokemonList.length; j++){
+                for (let j = 0; j < pokemonList.length; j++) {
                     //create li for each pokemon
                     let li = document.createElement('li')
                     //release button
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     releaseButton.setAttribute("data-pokemon-id", `${pokemonList[j].id}`)
                     releaseButton.innerText = "Release"
                     //add event to releaseButton
-                    releaseButton.addEventListener('click', function(){
+                    releaseButton.addEventListener('click', function () {
                         fetch(`${POKEMONS_URL}/${pokemonList[j].id}`, {
                             method: "DELETE"
                         })
@@ -59,49 +59,49 @@ document.addEventListener('DOMContentLoaded', function(){
                 main.append(div)
 
                 //fetch pokemon data
-                if (pokemonList.length < 6){
-                    fetch(`${POKEMONS_URL}`, {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "trainer_id": trainerList[i].id
-                        })
-                    })
-                    .then(function (response) {
-                        return response.json()
-                    })
-                    .then(function (pokemonData) {
-                        //add event to addButton
-                        addButton.addEventListener('click', function (e) {
+                if (pokemonList.length < 6) {
+                    //add event to addButton
+                    addButton.addEventListener('click', function (e) {
                         e.preventDefault();
-                        {
-                        let li = document.createElement('li')
-                        li.innerText = `${pokemonData.nickname}`
-                        ul.append(li)
-                        
-                                //release button
-                        let releaseButton = document.createElement('button')
-                        releaseButton.setAttribute("class", "release")
-                                releaseButton.setAttribute("data-pokemon-id", `${pokemonData.id}`)
-                        releaseButton.innerText = "Release"
-                                //add event to releaseButton
-                        releaseButton.addEventListener('click', function () {
-                            fetch(`${POKEMONS_URL}/${pokemonData.id}`, {
-                                method: "DELETE"
+                        //each time when we click the button, we get a new pokemon
+                        //below creates a new pokemon each time
+                        fetch(POKEMONS_URL, {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "trainer_id": trainerList[i].id
                             })
-                               li.remove();
-                            })
-                        
-                        //append release Button
-                        li.append(releaseButton)
-                        }
-
                         })
+                            .then(function (response) {
+                                return response.json()
+                            })
+                            .then(function (pokemonData) {
+                                //create HTML element for the new pokemon
+                                let li = document.createElement('li')
+                                li.innerText = `${pokemonData.nickname} (${pokemonData.species})`
+                                ul.append(li)
+
+                                //release button
+                                let releaseButton = document.createElement('button')
+                                releaseButton.setAttribute("class", "release")
+                                releaseButton.setAttribute("data-pokemon-id", `${pokemonData.id}`)
+                                releaseButton.innerText = "Release"
+                                //add event to releaseButton
+                                releaseButton.addEventListener('click', function () {
+                                    fetch(`${POKEMONS_URL}/${pokemonData.id}`, { method: "DELETE" })
+                                    li.remove();
+                                })
+                                //append release Button
+                                li.append(releaseButton)
+
+
+                            })
+
                     })
                 }
-            }       
-        })   
-    
+            }
+        })
+
 })
