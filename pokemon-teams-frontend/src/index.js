@@ -7,51 +7,41 @@ fetch(TRAINERS_URL)
         return res.json()   
     })
     .then(function(trainerData){
-        //itterating through trainers
-        trainerData.forEach(function(trainer){
-            trainerName = document.createElement('label')
-            trainerName.innerText = `Trainer Name: ${trainer.name}` 
+        //displaying all trainers and their pokemons 
+            trainerData.forEach(function(trainer){
+            const trainerName = document.createElement('p')
+            trainerName.innerText = `${trainer.name}` 
             main = document.querySelector('#main')
-            main.appendChild(trainerName)
-            //itterating through trainer's pokemon
+            const div = document.createElement('div')
+            div.className = 'card'
+            main.appendChild(div)
+            div.appendChild(trainerName)
+
+            //add pokemon button
+            const addPokemon = document.createElement('button')
+            addPokemon.innerText = "Add Pokemon"
+            addPokemon.className = "addPokemon"
+            div.appendChild(addPokemon)
+
+            //Create list
+            const ul = document.createElement('ul')
+            div.appendChild(ul)
+ 
+            //call createPokemon function
+            createPokemon(addPokemon, ul, trainer)
+
+            //displaying each trainer's pokemon
             trainer.pokemons.forEach(function(pokemon){
-                properties = document.createElement('li')
-                properties.innerText = `Pokemon: ${pokemon.nickname}, Species: ${pokemon.species}`
-                trainerName.appendChild(properties)
-                properties.appendChild(document.createElement('br'))
-                //add delete button
-                destroyPokemon = document.createElement('input')
-                destroyPokemon.type = 'submit'
-                destroyPokemon.value = "Release Pokemon"
-                destroyPokemon.className = "destroyPokemon"
-                properties.appendChild(destroyPokemon)
-                //add eventlistener to submit button
-                destroyPokemon.addEventListener('click', function(){
-                    fetch(`${POKEMONS_URL}/${pokemon.id}`, {
-                        method: 'DELETE'
-                    })
-            })
+            const li = document.createElement('li')
+            li.innerText = `${pokemon.nickname} (${pokemon.species})`
+            ul.appendChild(li)
+
+
+           
+            //call delete pokemon function     
+            deletePokemon(trainer, pokemon,li)
     
             })
-            //add pokemon button
-            addPokemon = document.createElement('input')
-            addPokemon.type = 'submit'
-            addPokemon.value = "Add Pokemon"
-            addPokemon.className = "addPokemon"
-            trainerName.appendChild(addPokemon)
-            //add eventlistener to submit button
-            addPokemon.addEventListener('click', function(){
-                if(trainer.pokemons.length < 6){
-                    fetch(POKEMONS_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }, 
-                        body: JSON.stringify({
-                            "trainer_id": trainer.id
-                        })
-                    })
-                }
-            })
+           
         })
     })
