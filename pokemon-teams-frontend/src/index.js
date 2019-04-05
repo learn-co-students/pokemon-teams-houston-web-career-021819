@@ -16,7 +16,7 @@ fetch(TRAINERS_URL)
             div.className = 'card'
             main.appendChild(div)
             div.appendChild(trainerName)
-
+   
             //add pokemon button
             const addPokemon = document.createElement('button')
             addPokemon.innerText = "Add Pokemon"
