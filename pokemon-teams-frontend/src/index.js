@@ -51,24 +51,24 @@ document.addEventListener("DOMContentLoaded", function(){
         })
     }
 
-    function addPokemonButton(trainerCard) {
-        const addButton = document.createElement("button")
-        addButton.innerText = "Add Pokemon"
-        trainerCard.append(addButton)
-        addPokemon(addButton,trainerCard)
-    }
+    // function addPokemonButton(trainerCard) {
+    //     const addButton = document.createElement("button")
+    //     addButton.innerText = "Add Pokemon"
+    //     trainerCard.append(addButton)
+    //     addPokemon(addButton,trainerCard)
+    // }
 
-    function addPokemon(button, card) {
-        button.addEventListener("click", function(){
-            fetch(`${POKEMONS_URL}/${pokemon.id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "trainer_id": trainer_id
-                })
-            })
-        })
-    }
+    // function addPokemon(button, card) {
+    //     button.addEventListener("click", function(){
+    //         fetch(`${POKEMONS_URL}/${pokemon.id}`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify({
+    //                 "trainer_id": trainer_id
+    //             })
+    //         })
+    //     })
+    // }
 })
